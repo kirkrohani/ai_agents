@@ -1,0 +1,132 @@
+{
+  "name": "Airtable",
+  "nodes": [
+    {
+      "parameters": {
+        "formTitle": "Contact Us",
+        "formDescription": "Please fill out this information and someone will reach out to you.",
+        "formFields": {
+          "values": [
+            {
+              "fieldLabel": "First Name"
+            },
+            {
+              "fieldLabel": "Last Name"
+            },
+            {
+              "fieldLabel": "Email",
+              "fieldType": "email",
+              "requiredField": true
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.formTrigger",
+      "typeVersion": 2.2,
+      "position": [
+        0,
+        0
+      ],
+      "id": "62095d93-c2b2-430b-90c2-0f3a38b53acb",
+      "name": "On form submission",
+      "webhookId": "498b392e-1b67-418e-8da7-62bb413dd073"
+    },
+    {
+      "parameters": {
+        "operation": "create",
+        "base": {
+          "__rl": true,
+          "value": "appG18oCTXsOAxxsX",
+          "mode": "list",
+          "cachedResultName": "Airtable1",
+          "cachedResultUrl": "https://airtable.com/appG18oCTXsOAxxsX"
+        },
+        "table": {
+          "__rl": true,
+          "value": "tblUSMTzGYdnyj18N",
+          "mode": "list",
+          "cachedResultName": "Table 1",
+          "cachedResultUrl": "https://airtable.com/appG18oCTXsOAxxsX/tblUSMTzGYdnyj18N"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "Name": "={{ $json['First Name'] }} {{ $json['Last Name'] }}",
+            "Email": "={{ $json.Email }}"
+          },
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "Name",
+              "displayName": "Name",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Email",
+              "displayName": "Email",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.airtable",
+      "typeVersion": 2.1,
+      "position": [
+        208,
+        0
+      ],
+      "id": "98f08378-f1f3-4702-8ba9-91ae7806542f",
+      "name": "Create a record",
+      "credentials": {
+        "airtableTokenApi": {
+          "id": "FpyRZNj5SpbTXpJC",
+          "name": "Airtable Personal Access Token account"
+        }
+      }
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "On form submission": {
+      "main": [
+        [
+          {
+            "node": "Create a record",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1",
+    "timezone": "America/Chicago",
+    "callerPolicy": "workflowsFromSameOwner",
+    "executionTimeout": -1
+  },
+  "versionId": "12af5c13-9ec9-4dfd-b235-a0fa3705c9e3",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "3eaf3300f7062d0d87f76b6e9da6091ed11bd55fe05e7b9052275d8ea9702d52"
+  },
+  "id": "K7fM11wRPHl6xUBU",
+  "tags": []
+}
