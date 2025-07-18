@@ -1,0 +1,138 @@
+{
+  "name": "Customer Bookings 1",
+  "nodes": [
+    {
+      "parameters": {
+        "pollTimes": {
+          "item": [
+            {
+              "mode": "everyMinute"
+            }
+          ]
+        },
+        "authentication": "airtableTokenApi",
+        "baseId": {
+          "__rl": true,
+          "value": "https://airtable.com/appG18oCTXsOAxxsX/tblFaaJ2lwbFUh99d/viwuL9SJJwClAfDHz?blocks=hide",
+          "mode": "url"
+        },
+        "tableId": {
+          "__rl": true,
+          "value": "https://airtable.com/appG18oCTXsOAxxsX/tblFaaJ2lwbFUh99d/viwuL9SJJwClAfDHz?blocks=hide",
+          "mode": "url"
+        },
+        "triggerField": "Created time",
+        "additionalFields": {}
+      },
+      "type": "n8n-nodes-base.airtableTrigger",
+      "typeVersion": 1,
+      "position": [
+        0,
+        0
+      ],
+      "id": "d6375227-679b-4cdc-a744-0898b8100362",
+      "name": "Airtable Trigger",
+      "credentials": {
+        "airtableTokenApi": {
+          "id": "FpyRZNj5SpbTXpJC",
+          "name": "Airtable Personal Access Token account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "modelId": {
+          "__rl": true,
+          "value": "gpt-4o",
+          "mode": "list",
+          "cachedResultName": "GPT-4O"
+        },
+        "messages": {
+          "values": [
+            {
+              "content": "=You are responsible for customer orders. Your task is to collect incoming information about new orders and create a clear summary for each new order that will be sent via email to the team. The email should be signed with \"Customer Success Team\".\n\nHere are the details of the customer orders:\n\nOrder number:{{ $json.fields['Order Number'] }}\nCustomer:{{ $json.fields.Customer }}\nProduct: {{ $json.fields.Product }}\nQuantity: {{ $json.fields.Quantity }}\nPrice: {{ $json.fields.Price }}\nDate: {{ $json.fields.Date }}\nStatus:{{ $json.fields.Status.value }}\n\nPlease provide the following output parameters:\n\nemail_subject\nemail_body\n\nmake a clean salutation, a clean body and a clean signature if needed use newlines"
+            }
+          ]
+        },
+        "jsonOutput": true,
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.openAi",
+      "typeVersion": 1.8,
+      "position": [
+        208,
+        0
+      ],
+      "id": "e7a4cc55-9d86-447d-b19f-5448526548b7",
+      "name": "Message a model",
+      "credentials": {
+        "openAiApi": {
+          "id": "aeazIdq7fCcXy6NZ",
+          "name": "OpenAi account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "sendTo": "kirk.rohani@gmail.com",
+        "subject": "={{ $json.message.content.email_subject }}",
+        "emailType": "text",
+        "message": "={{ $json.message.content.email_body }}",
+        "options": {
+          "appendAttribution": false
+        }
+      },
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.1,
+      "position": [
+        560,
+        0
+      ],
+      "id": "4a1eee59-9964-4e5f-9224-a76520c21f16",
+      "name": "Send a message",
+      "webhookId": "b84854d5-2ad6-4921-bccc-82de4e23ade4",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "6BRDhNZKMEXfG988",
+          "name": "Gmail account"
+        }
+      }
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Airtable Trigger": {
+      "main": [
+        [
+          {
+            "node": "Message a model",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Message a model": {
+      "main": [
+        [
+          {
+            "node": "Send a message",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": true,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "f3e3224e-72d5-45f3-954b-faa7604129db",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "3eaf3300f7062d0d87f76b6e9da6091ed11bd55fe05e7b9052275d8ea9702d52"
+  },
+  "id": "oPzcWwO3hH9gWOKf",
+  "tags": []
+}
